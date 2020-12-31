@@ -1,5 +1,5 @@
-#!name=YouTube
-#!desc=YouTube去广告
+#!name=YouTubeANDTikTok
+#!desc=油管和国际抖音去广告
 
 [Rule]
 URL-REGEX,https?:\/\/.+.googlevideo.com\/ptracking\?pltype=adhost,REJECT
@@ -22,5 +22,11 @@ URL-REGEX,https?:\/\/[\w-]+\.googlevideo\.com\/.+&(oad|ctier),REJECT
 ^https?+:\/\/\w+?\.youtube\.com\/p(?>agead|tracking) - reject-200
 ^https?+:\/\/youtubei\.googleapis\.com\/youtubei\/.+?(?>ad|log)_ - reject-200
 
+#tiktok美区解锁直播区域限制
+(?<=_region=)CN(?=&) US 307
+(?<=&mcc_mnc=)4 2 307
+^(https?:\/\/dm[\w-]+\.\w+\.com\/.+)(\?)(.+) $1$3 302
+(^https?:\/\/*\.\w{4}okv.com\/.+&.+)(\d{2}\.3\.\d)(.+) $118.0$3 302
+
 [MITM]
-hostname = %APPEND% *.googlevideo.com, *.youtube.com, youtubei.googleapis.com
+hostname = %APPEND% *.googlevideo.com, *.youtube.com, youtubei.googleapis.com，%APPEND% *.tiktokv.com,*.byteoversea.com,*.tik-tokapi.com
