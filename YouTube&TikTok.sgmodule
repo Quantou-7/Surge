@@ -1,7 +1,8 @@
-#!name=YouTube&TikTok
+#!name=油管和抖音去广告
 #!desc=油管和国际抖音去广告
 
 [Rule]
+#YouTube
 URL-REGEX,https?:\/\/.+.googlevideo.com\/ptracking\?pltype=adhost,REJECT
 URL-REGEX,https?:\/\/.+.youtube.com\/api\/stats\/ads,REJECT
 URL-REGEX,https?:\/\/.+.youtube.com\/get_midroll_,REJECT
@@ -15,18 +16,31 @@ URL-REGEX,https?:\/\/youtubei.googleapis.com\/.+ad_break,REJECT
 URL-REGEX,https?:\/\/youtubei.googleapis.com\/youtubei\/.+(ad|log),REJECT
 URL-REGEX,https?:\/\/s\.youtube\.com\/api\/stats\/qoe\?adformat,REJECT
 URL-REGEX,https?:\/\/[\w-]+\.googlevideo\.com\/.+&(oad|ctier),REJECT
+#抖音
+DOMAIN-SUFFIX, amemv.com, DIRECT
+DOMAIN-SUFFIX, byteimg.com, DIRECT
+DOMAIN-SUFFIX, dig.bdurl.net, DIRECT
+DOMAIN-SUFFIX, ibytedtos.com, REJECT
+DOMAIN-SUFFIX, ipstatp.com, REJECT
 
 [URL Rewrite]
+#YouTube
 ^https?+:\/\/.+?\.googlevideo\.com\/.+?(?>&oad|ctier) - reject-200
 ^https?+:\/\/\w+?\.youtube\.com\/api\/.+?ad - reject-200
 ^https?+:\/\/\w+?\.youtube\.com\/p(?>agead|tracking) - reject-200
 ^https?+:\/\/youtubei\.googleapis\.com\/youtubei\/.+?(?>ad|log)_ - reject-200
+#抖音
+^https?:\/\/.+?\.amemv\.com\/aweme\/v\d\/feed\/ https://aweme.snssdk.com/aweme/v1/feed/ header
+^https?:\/\/.+?\.amemv\.com\/aweme\/v\d\/aweme\/post\/ https://aweme.snssdk.com/aweme/v1/aweme/post/ header
+^https?:\/\/.+?\.amemv\.com\/aweme\/v\d\/follow\/feed\/ https://aweme.snssdk.com/aweme/v1/follow/feed/ header
+^https?:\/\/.+?\.amemv\.com\/aweme\/v\d\/nearby\/feed\/ https://aweme.snssdk.com/aweme/v1/nearby/feed/ header
+^https?:\/\/.+?\.amemv\.com\/aweme\/v\d\/search\/item\/ https://aweme.snssdk.com/aweme/v1/search/item/ header
+^https?:\/\/.+?\.amemv\.com\/aweme\/v\d\/general\/search\/single\/ https://aweme.snssdk.com/aweme/v1/general/search/single/ header
+^https?:\/\/.+?\.amemv\.com\/aweme\/v\d\/hot/search\/video\/list\/ https://aweme.snssdk.com/aweme/v1/hot/search/video/list/ header
 
-#tiktok美区解锁直播区域限制
-(?<=_region=)CN(?=&) US 307
-(?<=&mcc_mnc=)4 2 307
-^(https?:\/\/dm[\w-]+\.\w+\.com\/.+)(\?)(.+) $1$3 302
-(^https?:\/\/*\.\w{4}okv.com\/.+&.+)(\d{2}\.3\.\d)(.+) $118.0$3 302
+[Script]
+抖音 = type=http-response,pattern=^https?:\/\/aweme\.snssdk\.com\/aweme\/v1\/(feed|aweme\/post|follow\/feed|nearby\/feed|search\/item|general\/search\/single|hot\/search\/video\/list)\/ requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Choler/Surge/master/Script/douyin.js
+
 
 [MITM]
-hostname = %APPEND% *.googlevideo.com, *.youtube.com, youtubei.googleapis.com，%APPEND% *.tiktokv.com,*.byteoversea.com,*.tik-tokapi.com
+hostname = %APPEND% *.googlevideo.com, *.youtube.com, youtubei.googleapis.com, %APPEND% *.amemv.com
